@@ -1,0 +1,22 @@
+# Backend
+1. Kiem tra trung ma Cua hang
+2. Loc du lieu theo cac criteria ( ten, dia chi ,  ma cua hang, so dien thoai, trang thai ) 
+ - Trang thai : Dang hoat dong - Ngung hoat dong
+3. Kiem tra dia chi co valid hay khong 
+# Frontend
+ - CRUD
+ - Phan trang
+ - Filter 
+ - Custom Select box
+# Db
+
+# Other
+
+# Tim hieu ve Du an"
+- Muc dich cua du an
+- Du an phuc vu ai
+- Chuc nang cua du an
+
+# PHong van
+- Gt ban than
+- Gt giang vien day gi, minh hoc duoc gi, bai tap la gi, lam nhu nao

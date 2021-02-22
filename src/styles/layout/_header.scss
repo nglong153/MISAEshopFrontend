@@ -1,0 +1,126 @@
+.header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 60px;
+}
+    .header .logo-site{
+        width: calc( 220px - 24px);
+        height: 60px;
+        padding-left: 24px;
+        background-color: #005082;
+        background-image: url('assets/img/Logo_Full_White.png');
+        background-position: 9.5px center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        border: none !important;
+    }
+    .header .wrap-container{
+        width: calc(100% - 220px);
+        height: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: row-reverse;
+        align-content: center;
+        justify-items: center;
+    }
+        .header .wrap-container .title b{
+            height: 100%;
+            width: 100px;
+            position: absolute;
+            left: 24px;
+            vertical-align: center;
+            line-height: 60px;
+            font-size: 16px;
+        }
+        .header .department-info {
+            padding: 16px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-items: center;
+        }
+
+            .header .department-info select {
+                height: 40px;
+                width: 205px;
+                cursor: pointer;
+                font-weight: bold;
+                font-size: 15px;        
+            }
+
+                .header .department-info option{
+                    cursor: pointer;
+                }
+
+                .header .account-info {
+                    display: flex;
+                    align-items: center;
+                }
+
+            .header .account-info .account-avatar {
+                width: 30px;
+                height: 30px;
+                border: 1px solid #ccc;
+                border-radius: 50%;
+                background-image: url('assets/icon/avatar-default.png');
+                background-size:contain;
+            }
+
+            .header .account-info .account-name {
+                padding: 10px;
+            }
+
+            .header .account-info .account-option {
+                height: 16px;
+                cursor: pointer;
+                margin : 0 10px;
+            }
+
+            .header .wrap-container .account-info .account-option{
+                background-image: url("assets/icon/arrow-down-sign-to-navigate.png");
+                background-position: center;
+                background-size: contain;
+                background-repeat: no-repeat;
+                width: 15px;
+                height: 15px;
+            }
+        .header .wrap-container .contact{
+            background-image: url("assets/icon/ic_support.svg");
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+            width: 55px;
+            height: 60px;
+            filter : invert(31%) sepia(93%) saturate(1024%) hue-rotate(176deg) brightness(95%) contrast(95%);
+        }
+        .header .wrap-container .contact:hover{
+            background-color: #0973b9!important;
+            filter: none;
+        }
+
+        .header .wrap-container .notification{
+            width: 55px;
+            height: 60px;
+            background-image: url("assets/icon/notification-icon.png");
+            background-repeat: no-repeat;
+            background-size: 30px 30px;
+            background-position: center;
+            filter : invert(31%) sepia(93%) saturate(1024%) hue-rotate(176deg) brightness(95%) contrast(95%);
+        }
+            .header .wrap-container .notification:hover{
+                background-color: #0973b9!important;
+                filter :none;
+            }
+        .header .wrap-container .help{
+            background-image: url("assets/icon/question-mark.png");
+            background-repeat: no-repeat;
+            background-size: 30px 30px;
+            background-position: center;
+            width: 55px;
+            height: 60px;
+        }
+        .header .wrap-container .help:hover{
+            background-color: #0973b9!important;
+                filter: none;
+        }
