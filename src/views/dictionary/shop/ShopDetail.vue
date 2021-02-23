@@ -213,7 +213,7 @@ export default {
       if (this.validate() == true ) 
       {
         axios.post("https://localhost:44348/api/v1/Shop",this.shopDetail)
-        .then(() => this.$emit('CloseAndUpdate')).catch( error => this.$emit('bad-request',error.response.data.message) )
+        .then(() => this.$emit('CloseAndUpdate','add')).catch( error => this.$emit('bad-request',error.response.data.message) )
       }
       else {
         // Hiển thị Icon cảnh báo
@@ -231,7 +231,7 @@ export default {
       if (this.validate() == true ) 
       {
         axios.put("https://localhost:44348/api/v1/Shop",this.shopDetail)
-        .then(() => this.$emit('CloseAndUpdate')).catch( error => this.$emit('bad-request',error.response.data.message) )
+        .then(() => this.$emit('CloseAndUpdate'),'save').catch( error => this.$emit('bad-request',error.response.data.message) )
       }
       else 
       {

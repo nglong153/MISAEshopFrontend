@@ -2,17 +2,15 @@
   <div class="content-body">
     
     <div class="header-content">
-      
       <div class="title">Danh sách cửa hàng</div>
       <!-- < class="content-feature"> -->
+      <toast-message v-show="isHideToast" :toast-content="toastContent"/>
       <shop-detail @bad-request='BadRequestHandler'  @CloseAndUpdate="reloadAfterEdit" @Close='CloseForm' :isHide = "isHideParent" :shopDetail="selectedShop" />
-      
       <popup @execute="deleteShop" @popupClose="ClosePopup" 
       :popup-state="isHidePopup" 
       :popup-content="popupContent" 
       :popup-type="popupType" 
       :popup-header="popupHeader"/>
-
     </div>
     
     <!-- <v-data-table
@@ -27,7 +25,7 @@
         <div class="icon add-icon"></div>
         <span>Thêm mới</span>
       </div>
-      <div class="tool-holder">
+      <div class="tool-holder" style="opacity:0.2; pointer-events:none;">
         <div class="icon duplicate-icon"></div>
         <span>Nhân bản</span>
       </div>
@@ -104,7 +102,7 @@
           </td>
       </tr>
       <tbody>
-        <tr class="data-row" v-for="shop in shops" :key="shop.shopID" :id="shop.shopID" @click=rowOnClick(shop.shopID)>
+        <tr class="data-row" v-for="shop in shops" :key="shop.shopID" :id="shop.shopID" @click=rowOnClick(shop.shopID) @dblclick="rowOnDblClick(shop.shopID)">
           <td>{{shop.shopCode}}</td>
           <td colspan="2">{{shop.shopName}}</td>
           <td colspan="2">{{shop.shopAddress}}</td>
@@ -140,14 +138,15 @@ import * as axios from "axios";
 import ShopDetail from './ShopDetail.vue';
 import Popup from '../../../components/Popup.vue';
 import Loading from '../../../components/Loading.vue';
-// import SelectBox from "../../../components/SelectBox.vue"
+import ToastMessage from '../../../components/ToastMessage.vue'
 
 export default {
   name: "Shop",
   components: {
     ShopDetail,
     Popup,
-    Loading
+    Loading,
+    ToastMessage
   },
   methods: {
     // 1. Nhóm methods xử lý event của các nút chức năng
@@ -191,7 +190,7 @@ export default {
       })
     },
     // 2. Nhóm Methods xử lý thao tác của người dùng trên bảng dữ liệu
-    rowOnClick(rowID){
+    async rowOnClick(rowID){
       var selectedRow = document.getElementById(rowID);
       var rows = document.querySelectorAll(".data-row");
       for (let row of rows){
@@ -207,6 +206,9 @@ export default {
           break;
         }
       }
+    },
+    async rowOnDblClick(rowID){
+      this.rowOnClick(rowID).then(this.editButtonClicked)
     },
     deleteShop()
     {
@@ -264,8 +266,14 @@ export default {
       this.popupType = "";
       this.isHidePopup = false;
     },
-    reloadAfterEdit(){
+    reloadAfterEdit(type){
       this.isHideParent = true;
+      if(type == 'add') {
+        this.toastContent = 'Thêm mới thành công'
+      }
+      if (type == 'edit'){
+        this.toastContent = "Sửa thành công"
+      }
       this.GetShopList()
     },
     // 4. 
@@ -289,6 +297,7 @@ export default {
        */
       isHideParent : true,
       isHidePopup : true,
+      isHideToast : true,
       selectedShop : {},
 
       shops: [],
@@ -305,38 +314,13 @@ export default {
         shopStreet: ''
       },
 
-      headers: [
-        {
-          text: "Mã nhân viên",
-          align: "start",
-          sortable: false,
-          value: "EmployeeCode",
-        },
-        { text: "Họ và tên", value: "FullName", align: "end" },
-        { text: "Ngày sinh", value: "DateOfBirth" },
-        { text: "Giới tính", value: "GenderName" },
-        { text: "Vị trí", value: "PositionName" },
-        { text: "Phòng ban", value: "DepartmentName" },
-        { text: "Địa chỉ Email", value: "Email" },
-        { text: "Số điện thoại", value: "PhoneNumber" },
-        { text: "Mức lương", value: "Salary" },
-        { text: "Địa chỉ", value: "Address" },
-        { text: "Trạng thái công việc", value: "WorkStatusName" },
-      ],
-
-      openSelectBox : false,
-
-      selectContent : [
-        'Tất cả nội dung',
-        'Tất cả vị tr'
-      ],
-
       popupContent : "Bạn có chắc muốn xóa ",
       popupType: 'danger',
       popupHeader : "Xóa thông tin nhân viên ",
       popupState : '',
 
       isLoading : false,
+      toastContent : 'Thêm mới cửa hàng thành công'
     };
   },
   created() {
