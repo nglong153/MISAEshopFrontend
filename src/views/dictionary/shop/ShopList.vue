@@ -4,7 +4,7 @@
     <div class="header-content">
       <div class="title">Danh sách cửa hàng</div>
       <!-- < class="content-feature"> -->
-      <toast-message v-show="isHideToast" :toast-content="toastContent"/>
+      <toast-message :is-hide-toast="isHideToast" :toast-content="toastContent"/>
       <shop-detail @bad-request='BadRequestHandler'  @CloseAndUpdate="reloadAfterEdit" @Close='CloseForm' :isHide = "isHideParent" :shopDetail="selectedShop" />
       <popup @execute="deleteShop" @popupClose="ClosePopup" 
       :popup-state="isHidePopup" 
@@ -267,14 +267,18 @@ export default {
       this.isHidePopup = false;
     },
     reloadAfterEdit(type){
-      this.isHideParent = true;
       if(type == 'add') {
         this.toastContent = 'Thêm mới thành công'
       }
       if (type == 'edit'){
         this.toastContent = "Sửa thành công"
       }
-      this.GetShopList()
+      this.GetShopList().then(() => {this.isHideToast = false}).then(() => {
+        this.isHideParent = true;
+        setTimeout(() => {
+          this.isHideToast = true;
+        },2000);
+      })
     },
     // 4. 
     async GetShopList(){

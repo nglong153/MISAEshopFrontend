@@ -1,5 +1,5 @@
 <template>
-    <div class="toast">
+    <div v-show="!isHideToast" class="toast">
         <span>
             {{toastContent}}
         </span>
@@ -13,6 +13,10 @@ export default {
         toastContent : {
             type: String,
             required : true
+        },
+        isHideToast : {
+            type: Boolean,
+            required : true
         }
     },
     methods :{
@@ -22,10 +26,6 @@ export default {
         hideToast(){
             document.querySelector(".toast").classList.remove("show")
         }
-    },
-    updated(){
-        console.log('toast created')
-        setTimeout(this.hideToast,2000);
     }
 
 }
@@ -34,7 +34,6 @@ export default {
 <style scoped>
 /* Style Toast Message Position */
 .toast{
-    display: none;
     position: absolute;
     right: 0px;
     top: 0px;
