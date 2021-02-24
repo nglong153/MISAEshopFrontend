@@ -1,10 +1,10 @@
 <template>
   <div class="content-body">
-    
+     <toast-message :is-hide-toast="isHideToast" :toast-content="toastContent"/>
     <div class="header-content">
       <div class="title">Danh sách cửa hàng</div>
       <!-- < class="content-feature"> -->
-      <toast-message :is-hide-toast="isHideToast" :toast-content="toastContent"/>
+     
       <shop-detail @bad-request='BadRequestHandler'  @CloseAndUpdate="reloadAfterEdit" @Close='CloseForm' :isHide = "isHideParent" :shopDetail="selectedShop" />
       <popup @execute="deleteShop" @popupClose="ClosePopup" 
       :popup-state="isHidePopup" 
@@ -52,7 +52,7 @@
         style="min-width: 100%">
       <thead>
         <tr>
-          <th> Mã Nhà Hàng</th>
+          <th > Mã Nhà Hàng</th>
           <th  colspan="2">Tên Nhà Hàng</th>
           <th  colspan="2">Địa Chỉ</th>
           <th>Số Điện Thoại</th>
@@ -152,7 +152,10 @@ export default {
     // 1. Nhóm methods xử lý event của các nút chức năng
     btnAddOnClick() {
       this.isHideParent = !this.isHideParent;
-      this.selectedShop = {};
+      this.selectedShop = {}
+      this.selectedShop.cityName = "default",
+      this.selectedShop.districtName = "default",
+      this.selectedShop.wardName = "default"
     },
     
     editButtonClicked(){
@@ -228,7 +231,6 @@ export default {
     ,
     // 3. Nhóm Methods xử lý sự kiện được con emit lên
     CloseForm(){
-
       this.isHideParent = true;
       var rowID = "";
       var rows = document.querySelectorAll(".data-row");
@@ -268,16 +270,16 @@ export default {
     },
     reloadAfterEdit(type){
       if(type == 'add') {
-        this.toastContent = 'Thêm mới thành công'
+        this.toastContent = 'Thêm mới cửa hàng thành công'
       }
       if (type == 'edit'){
-        this.toastContent = "Sửa thành công"
+        this.toastContent = "Sửa cửa hàng thành công"
       }
       this.GetShopList().then(() => {this.isHideToast = false}).then(() => {
         this.isHideParent = true;
         setTimeout(() => {
           this.isHideToast = true;
-        },2000);
+        },3000);
       })
     },
     // 4. 
@@ -314,8 +316,11 @@ export default {
         shopPhoneNumber : '',
         shopCode : '',
         shopTaxCode :'',
-        shopNation :'',
-        shopStreet: ''
+        shopNation :"",
+        shopStreet: "",
+        districtName : "default",
+        wardName : "default",
+        cityName : "default",
       },
 
       popupContent : "Bạn có chắc muốn xóa ",
@@ -416,7 +421,7 @@ export default {
 /* Style the tool bars */
 .tool-bars{
   display: flex;
-  background-color: #005082;
+  background-color: #2B3173;
   width: 100%;
   height: 34px;
   align-items: center;
@@ -430,7 +435,7 @@ export default {
     align-items: center;
     padding: 0px 5px;
     cursor: pointer;
-    border: 1px solid #005082;
+    border: 1px solid #2B3173;
     margin-left: 4px;
 
   }
@@ -494,7 +499,7 @@ tbody tr:nth-child(odd) {
   background-color: #fff;
 }
 tbody tr:hover{
-  background-color: #d1f1ff;
+  background-color: #E2E4F1;
 }
 input{
   max-height: 40px;
@@ -504,7 +509,7 @@ input[type=checkbox]{
   width: 20px;
 }
     tr.selected-row{
-      background-color:#c3ecff  !important;
+      background-color:#E2E4F1  !important;
     }
 
 /* Style the Footer Bar */

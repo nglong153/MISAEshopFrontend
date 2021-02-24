@@ -86,8 +86,8 @@ textarea{
         width: 20px;
     }
 
-    input:focus, select:focus {
-        border-color: #019160;
+    input:focus, select:focus,textarea:focus {
+        border-color: #8890E6;
     }
 
     input::placeholder {

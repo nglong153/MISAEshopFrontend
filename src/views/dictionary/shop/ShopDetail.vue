@@ -32,6 +32,7 @@
                       required
                       class="input-required"
                       type="text"
+                      ref ="shopCode"
                       v-model="shopDetail.shopCode"    
                     >
                     <span id='shopCode-warning-icon' class="warning-icon isHide">&nbsp;</span>
@@ -129,7 +130,7 @@
                     v-model="shopDetail.cityName"
                     
                   >
-                  
+                  <option value="default" disabled>Nhấp để tìm kiếm thành phố</option>
                   <option  v-for="city in cities" :key="city.cityID"
                     :value="city.cityName">
                    {{city.cityName}}
@@ -147,6 +148,7 @@
                     v-model="shopDetail.districtName"
                     @change="setSelectedDistrict"
                   >
+                  <option value="default" disabled >Nhấp để tìm kiếm quận/ huyện </option>
                   <option v-for="district in districts" :key="district.districtID" :value="district.districtName">{{district.districtName}}</option>
                   </select>
                 </div>
@@ -163,6 +165,7 @@
                     v-model="shopDetail.wardName"
                     @change="setSelectedWard"
                   >
+                  <option value="default" disabled>Nhấp để tìm kiếm phường / xã</option>
                   <option v-for="ward in wards" :key="ward.wardID" :value="ward.wardName">{{ward.wardName}}</option>
                   </select>
                    
@@ -208,7 +211,9 @@ export default {
   },
   methods: {
     
-    // Nhóm dữ liệu thực hiện chức năng các button
+    // 1.Nhóm dữ liệu thực hiện chức năng các button
+
+    // Lưu thông tin shop
     async saveShop(){
       if (this.validate() == true ) 
       {
@@ -228,6 +233,7 @@ export default {
         document.getElementById("shopAddress-warning-text").classList.remove('isHide')
       }
     },
+    // Sửa thông tin shop
     async editShop(){
       if (this.validate() == true ) 
       {
@@ -248,11 +254,15 @@ export default {
         document.getElementById("shopAddress-warning-text").classList.remove('isHide')
       }
     },
+
+    // Đóng Form 
     btnCancelOnClick() {
       this.$emit('Close')
     },
 
     // Nhóm Method để lấy dữ liệu : quận, huyện
+
+    // Lấy dữ liệu quận
     async getDistrict(){
       var url = "https://localhost:44348/GetDistrictByCity?CityID=";
       url +=this.shopDetail.cityID;
@@ -262,6 +272,7 @@ export default {
       }
     },
 
+    // Lấy dữ liệu Phường / Xã
     async getWard(){
       var url ="https://localhost:44348/GetWardByDistrict?DistrictID=";
       url += this.shopDetail.districtID;
@@ -273,6 +284,8 @@ export default {
 
 
     // 3.Nhóm methods gắn các trường ( cityID,wardID,DistrictID)
+
+    // Gắn trường cityID cho Đối tượng shop
     async setSelectedCity(){
         var url = "https://localhost:44348/GetCityIDByName?CityName=";
         url += this.shopDetail.cityName;
@@ -280,7 +293,7 @@ export default {
         this.shopDetail.cityID = response.data.data;
         this.getDistrict()
     },
-
+    // Gắn trường districtID cho Đối tượng quận
     async setSelectedDistrict(){
       var url= "https://localhost:44348/GetDistrictID?CityID="
       url += this.shopDetail.cityID+"&DistrictName="+this.shopDetail.districtName;
@@ -289,6 +302,7 @@ export default {
       this.getWard()
     },
 
+    // Gắn trường wardID cho đối tượng Phường / Xã
     async setSelectedWard(){
       var url= "https://localhost:44348/GetWardID?DistrictID="
       url += this.shopDetail.districtID+"&WardName="+this.shopDetail.wardName;
@@ -316,6 +330,9 @@ export default {
          rightFormat = false; 
       }
       return rightFormat;
+    },
+    focusOnInput(){
+      this.$refs.shopCode.focus();
     }
   },
   data() {
@@ -330,6 +347,9 @@ export default {
   async created(){
     const response = await axios.get("https://localhost:44348/api/v1/City");
     this.cities = response.data.data;
+  },
+  updated(){
+this.focusOnInput();
   },
   watch:{
     'shopDetail.cityID' : function(){
