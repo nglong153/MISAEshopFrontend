@@ -33,7 +33,7 @@
                       class="input-required"
                       type="text"
                       ref ="shopCode"
-                      v-model="shopDetail.shopCode"    
+                      v-model="shopDetail.shopCode" 
                     >
                     <span id='shopCode-warning-icon' class="warning-icon isHide">&nbsp;</span>
                     <span id='shopCode-warning-text' class="label-required isHide"> Không được để trống Mã cửa hàng</span>
@@ -130,7 +130,7 @@
                     v-model="shopDetail.cityName"
                     
                   >
-                  <option value="default" disabled>Nhấp để tìm kiếm thành phố</option>
+                  <option value="" disabled>Nhấp để tìm kiếm thành phố</option>
                   <option  v-for="city in cities" :key="city.cityID"
                     :value="city.cityName">
                    {{city.cityName}}
@@ -148,7 +148,7 @@
                     v-model="shopDetail.districtName"
                     @change="setSelectedDistrict"
                   >
-                  <option value="default" disabled >Nhấp để tìm kiếm quận/ huyện </option>
+                  <option value="" disabled >Nhấp để tìm kiếm quận/ huyện </option>
                   <option v-for="district in districts" :key="district.districtID" :value="district.districtName">{{district.districtName}}</option>
                   </select>
                 </div>
@@ -165,7 +165,7 @@
                     v-model="shopDetail.wardName"
                     @change="setSelectedWard"
                   >
-                  <option value="default" disabled>Nhấp để tìm kiếm phường / xã</option>
+                  <option value="" disabled>Nhấp để tìm kiếm phường / xã</option>
                   <option v-for="ward in wards" :key="ward.wardID" :value="ward.wardName">{{ward.wardName}}</option>
                   </select>
                    
@@ -205,10 +205,22 @@
 import axios from 'axios';
 export default {
   name:"ShopDetail",
+
   props:{
     isHide : Boolean,
     shopDetail : Object
   },
+
+  data() {
+    return {
+      dialog: false,
+      display: "none",
+      cities : [],
+      districts : [],
+      wards : []
+    };
+  },
+
   methods: {
     
     // 1.Nhóm dữ liệu thực hiện chức năng các button
@@ -217,6 +229,7 @@ export default {
     async saveShop(){
       if (this.validate() == true ) 
       {
+        console.log(this.shopDetail);
         axios.post("https://localhost:44348/api/v1/Shop",this.shopDetail)
         .then(() => this.$emit('CloseAndUpdate','add'))
         .catch( error => this.$emit('bad-request',error.response.data.message) )
@@ -335,21 +348,9 @@ export default {
       this.$refs.shopCode.focus();
     }
   },
-  data() {
-    return {
-      dialog: false,
-      display: "none",
-      cities : [],
-      districts : [],
-      wards : []
-    };
-  },
   async created(){
     const response = await axios.get("https://localhost:44348/api/v1/City");
     this.cities = response.data.data;
-  },
-  updated(){
-this.focusOnInput();
   },
   watch:{
     'shopDetail.cityID' : function(){
@@ -357,6 +358,9 @@ this.focusOnInput();
     },
     'shopDetail.districtID' : function(){
       this.getWard()
+    },
+    'shopDetail.shopCode' : function(){
+      setTimeout(this.focusOnInput,200)
     }
   }
 };

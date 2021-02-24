@@ -5,12 +5,14 @@
       <div class="title">Danh sách cửa hàng</div>
       <!-- < class="content-feature"> -->
      
-      <shop-detail @bad-request='BadRequestHandler'  @CloseAndUpdate="reloadAfterEdit" @Close='CloseForm' :isHide = "isHideParent" :shopDetail="selectedShop" />
+      <shop-detail @bad-request='BadRequestHandler'  @CloseAndUpdate="reloadAfterEdit" 
+                   @Close='CloseForm' :isHide = "isHideParent" :shopDetail="selectedShop" 
+                    />
       <popup @execute="deleteShop" @popupClose="ClosePopup" 
-      :popup-state="isHidePopup" 
-      :popup-content="popupContent" 
-      :popup-type="popupType" 
-      :popup-header="popupHeader"/>
+            :popup-state="isHidePopup" 
+            :popup-content="popupContent" 
+            :popup-type="popupType" 
+            :popup-header="popupHeader"/>
     </div>
     
     <!-- <v-data-table
@@ -56,7 +58,7 @@
           <th  colspan="2">Tên Nhà Hàng</th>
           <th  colspan="2">Địa Chỉ</th>
           <th>Số Điện Thoại</th>
-          <th>Đang Hoạt động</th>
+          <th>Trạng thái</th>
         </tr>
       </thead>
       <tr>
@@ -65,7 +67,7 @@
               <div class="filter-type" >
                 <span>*</span>
               </div>
-            <input type="text">
+            <input class = "filter-input" type="text">
             </div>
           </td>
           <td colspan="2">
@@ -73,7 +75,7 @@
               <div class="filter-type" >
                 <span>*</span>
               </div>
-            <input type="text">
+            <input class = "filter-input" type="text">
             </div>
           </td>
           <td colspan="2">
@@ -81,7 +83,7 @@
               <div class="filter-type" >
                 <span>*</span>
               </div>
-            <input type="text">
+            <input class = "filter-input" type="text">
             </div>
           </td>
           <td>
@@ -89,16 +91,15 @@
               <div class="filter-type" >
                 <span>*</span>
               </div>
-            <input type="text">
+            <input class = "filter-input" type="text">
             </div>
           </td>
           <td>
-            <div class="filter-holder">
-              <div class="filter-type" >
-                <span>*</span>
-              </div>
-            <input type="text">
-            </div>
+           <select  class = "filter-input" name="shop-status" id="shop-status">
+             <option value="0">Ngừng Hoạt Động</option>
+             <option value="1">Đang Hoạt Động</option>
+             <option value="2" selected>Tất cả trạng thái</option>
+           </select>
           </td>
       </tr>
       <tbody>
@@ -107,7 +108,12 @@
           <td colspan="2">{{shop.shopName}}</td>
           <td colspan="2">{{shop.shopAddress}}</td>
           <td>{{shop.shopPhoneNumber}}</td>
-          <td style="display: flex; justify-content:center;"><input type="checkbox" class="status-checkbox" :checked="{true : shop.shopStatus == 1}"></td>
+          <td v-if ="shop.shopStatus == 1">
+            <span>Đang Hoạt Động</span>
+          </td>
+          <td v-else  >
+             <span>Ngừng hoạt động </span>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -153,9 +159,9 @@ export default {
     btnAddOnClick() {
       this.isHideParent = !this.isHideParent;
       this.selectedShop = {}
-      this.selectedShop.cityName = "default",
-      this.selectedShop.districtName = "default",
-      this.selectedShop.wardName = "default"
+      this.selectedShop.cityName = "",
+      this.selectedShop.districtName = "",
+      this.selectedShop.wardName = ""
     },
     
     editButtonClicked(){
@@ -304,11 +310,7 @@ export default {
       isHideParent : true,
       isHidePopup : true,
       isHideToast : true,
-      selectedShop : {},
-
-      shops: [],
-
-      baseShop : {
+      selectedShop : {
         shopAddress: '',
         shopID: '',
         shopName: '',
@@ -322,6 +324,8 @@ export default {
         wardName : "default",
         cityName : "default",
       },
+
+      shops: [],
 
       popupContent : "Bạn có chắc muốn xóa ",
       popupType: 'danger',
@@ -412,10 +416,12 @@ export default {
   display:flex; 
   align-items:center;
   justify-content: center;
-  min-height:39px; 
   min-width:39px;
-  margin-right: 4px;
   border : 1px solid #bbbbbb;
+}
+
+.filter-input{
+  border-radius: 0 !important;
 }
 
 /* Style the tool bars */
@@ -491,7 +497,10 @@ table{
   overflow: auto;
   height: 500px;
 }
-
+td.text-center{
+  display: flex; 
+  justify-content:center;
+}
 tbody tr:nth-child(even) {
   background-color: #eee;
 }
